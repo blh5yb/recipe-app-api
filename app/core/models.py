@@ -18,7 +18,7 @@ class UserManager(BaseUserManager):
         """Creates and saves a new super user"""
         user = self.create_user(email, password)
         user.is_staff = True
-        user.is_super_user = True
+        user.is_superuser = True
         user.save(using=self._db)
 
         return user
@@ -34,4 +34,3 @@ class User(AbstractBaseUser, PermissionsMixin):  # give us the features from dja
     objects = UserManager()
 
     USERNAME_FIELD = 'email'  # customize username field to email
-

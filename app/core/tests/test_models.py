@@ -17,7 +17,7 @@ class ModelTests(TestCase):
         # helper function (check_password) to check encrypted password assertion
         self.assertTrue(user.check_password(password))
 
-    def test_new_user_email_normailized(self):
+    def test_new_user_email_normalized(self):
         """Test the email for a new user is normalized"""
         email = 'testemail@GMAIL.com'
         user = get_user_model().objects.create_user(email, 'test123')
@@ -36,5 +36,5 @@ class ModelTests(TestCase):
             'test123'
         )
 
-        self.assertTrue(user.is_super_user)
+        self.assertTrue(user.is_superuser)
         self.assertTrue(user.is_staff)
