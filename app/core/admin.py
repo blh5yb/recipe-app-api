@@ -25,3 +25,4 @@ class UserAdmin(BaseUserAdmin):  # extend base user admin
 
 
 admin.site.register(models.User, UserAdmin)
+admin.site.register(models.Tag)
