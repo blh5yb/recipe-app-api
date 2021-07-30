@@ -28,7 +28,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):  # give us the features from django user model
     """Custom user model that supports using email instead of username"""
-    email = models.EmailField(max_length=255, unique=True)
+    email = models.EmailField(max_length=255, unique=True)  # columns in database
     name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)  # when user is created, it is active
     is_staff = models.BooleanField(default=False)  # actived user is not staff
@@ -40,7 +40,7 @@ class User(AbstractBaseUser, PermissionsMixin):  # give us the features from dja
 
 class Tag(models.Model):
     """Tag to be used for a recipe"""
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)  # columns in database
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,  # if you delete user, delete models as well
@@ -52,7 +52,7 @@ class Tag(models.Model):
 
 class Ingredient(models.Model):
     """Ingredient to be used in a recipe"""
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)  # columns in database
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE
@@ -60,3 +60,20 @@ class Ingredient(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Recipe(models.Model):
+    """Recipe object"""
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,  # Foreign key to AUTH_USER_MODEL
+        on_delete=models.CASCADE
+    )  # columns in database
+    title = models.CharField(max_length=255)
+    time_minutes = models.IntegerField()
+    price = models.DecimalField(max_digits=5, decimal_places=2)
+    link = models.CharField(max_length=255, blank=True)
+    ingredients = models.ManyToManyField('Ingredient')
+    tags = models.ManyToManyField('Tag')
+
+    def __str__(self):
+        return self.title  # why?
