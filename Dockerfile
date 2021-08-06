@@ -21,5 +21,5 @@ RUN mkdir -p /vol/web/static
 #-D for running app only - security purposes
 RUN adduser -D user
 RUN chown -R user:user /vol/
-RUN chown -R 155 /vol/web
+RUN chmod -R 755 /vol/web
 USER user
