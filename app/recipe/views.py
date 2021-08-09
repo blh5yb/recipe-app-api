@@ -41,9 +41,26 @@ class RecipeViewSet(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
 
+    # '_function' indicated function is intended to be private
+    def _params_to_ints(self, qs):
+        """Convert a list of string IDs (qs) to a list of intergers"""
+        return [int(str_id) for str_id in qs.split(',')]
+
     def get_queryset(self):
         """Retrieve the recipes for the authenticated user"""
-        return self.queryset.filter(user=self.request.user)
+        tags = self.request.query_params.get('tags')  # get the tags
+        ingredients = self.request.query_params.get('ingredients')
+        queryset = self.queryset  # apply filter and then return filtered queryset
+
+        if tags:
+            tag_ids = self._params_to_ints(tags)
+            queryset = queryset.filter(tags__id__in=tag_ids)  # django syntax for filtering on foreign key objects
+
+        if ingredients:
+            ingredient_ids = self._params_to_ints(ingredients)
+            queryset = queryset.filter(ingredients__id__in=ingredient_ids)
+
+        return queryset.filter(user=self.request.user)
 
     def get_serializer_class(self):  # best practice so Django knows which serializer to return in browser api
         """Return appropriate serializer class"""
